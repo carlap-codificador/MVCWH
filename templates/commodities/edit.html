@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %} COMMODITIES | EDIT {% endblock %}
+
+{% block content %}
+
+<h1>Update Commodity</h1>
+
+<form action="{{ url_for('commodity.edit', id=commodity.id) }}" method="POST">
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <input type="text" class="form-control" name="description" 
+               value="{{ commodity.description }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Package type</label>
+        <select name="package_type" class="form-select" required>
+            <option value="box"   {% if commodity.package_type == 'box' %}selected{% endif %}>Box</option>
+            <option value="pallet"{% if commodity.package_type == 'pallet' %}selected{% endif %}>Pallet</option>
+            <option value="barrel"{% if commodity.package_type == 'barrel' %}selected{% endif %}>Barrel</option>
+            <option value="skid"  {% if commodity.package_type == 'skid' %}selected{% endif %}>Skid</option>
+            <option value="drum"  {% if commodity.package_type == 'drum' %}selected{% endif %}>Drum</option>
+            <option value="roll"  {% if commodity.package_type == 'roll' %}selected{% endif %}>Roll</option>
+            <option value="bag"   {% if commodity.package_type == 'bag' %}selected{% endif %}>Bag</option>
+            <option value="crate" {% if commodity.package_type == 'crate' %}selected{% endif %}>Crate</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Pieces</label>
+        <input type="number" class="form-control" name="pieces"
+               value="{{ commodity.pieces }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Length</label>
+        <input type="number" class="form-control" name="length" min="0" step="0.01"
+               value="{{ commodity.length }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Width</label>
+        <input type="number" class="form-control" name="width" min="0" step="0.01"
+               value="{{ commodity.width }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Height</label>
+        <input type="number" class="form-control" name="height" min="0" step="0.01"
+               value="{{ commodity.height }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Unit (dimensions)</label>
+        <select name="unit" class="form-select" required>
+            <option value="inch" {% if commodity.unit == 'inch' %}selected{% endif %}>inch</option>
+            <option value="cm"   {% if commodity.unit == 'cm' %}selected{% endif %}>cm</option>
+            <option value="foot" {% if commodity.unit == 'foot' %}selected{% endif %}>foot</option>
+            <option value="m"    {% if commodity.unit == 'm' %}selected{% endif %}>m</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Weight</label>
+        <div class="input-group">
+            <input type="number" class="form-control" name="weight" min="0" step="0.01"
+                   value="{% if commodity.weight_unit == 'kg' %}
+                              {{ commodity.weight | round(2) }}
+                          {% else %}
+                              {{ (commodity.weight / 0.453592) | round(2) }}
+                          {% endif %}"
+                   required>
+            <select name="weight_unit" class="form-select">
+                <option value="kg" {% if commodity.weight_unit == 'kg' %}selected{% endif %}>kg</option>
+                <option value="lb" {% if commodity.weight_unit == 'lb' %}selected{% endif %}>lb</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Volume</label>
+        <div class="input-group">
+            <input type="number" class="form-control" name="volume" id="volume"
+                   min="0" step="0.0001"
+                   value="{{ commodity.get_volume_display() | round(4) }}"
+                   readonly>
+            <select name="volume_unit" id="volume_unit" class="form-select">
+                <option value="m3"  {% if commodity.volume_unit == 'm3' %}selected{% endif %}>m³</option>
+                <option value="cm3" {% if commodity.volume_unit == 'cm3' %}selected{% endif %}>cm³</option>
+                <option value="ft3" {% if commodity.volume_unit == 'ft3' %}selected{% endif %}>ft³</option>
+                <option value="in3" {% if commodity.volume_unit == 'in3' %}selected{% endif %}>in³</option>
+            </select>
+        </div>
+        <small class="text-muted">El volumen se recalcula automáticamente si cambias dimensiones o unidades.</small>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select" required>
+            <option value="0" {% if commodity.status == 0 %}selected{% endif %}>On Hand</option>
+            <option value="1" {% if commodity.status == 1 %}selected{% endif %}>Released</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Commodity</button>
+
+</form>
+
+<script>
+function computeVolume() {
+    const length = parseFloat(document.querySelector('[name=length]').value) || 0;
+    const width  = parseFloat(document.querySelector('[name=width]').value)  || 0;
+    const height = parseFloat(document.querySelector('[name=height]').value) || 0;
+    const dimUnit   = document.querySelector('[name=unit]').value;
+    const volumeSel = document.getElementById('volume_unit').value;
+
+    let L = length, W = width, H = height;
+
+    if (dimUnit === 'cm') {
+        L = length / 100.0;
+        W = width  / 100.0;
+        H = height / 100.0;
+    } else if (dimUnit === 'inch') {
+        L = length * 0.0254;
+        W = width  * 0.0254;
+        H = height * 0.0254;
+    } else if (dimUnit === 'foot') {
+        L = length * 0.3048;
+        W = width  * 0.3048;
+        H = height * 0.3048;
+    }
+
+    let volume_m3 = L * W * H;
+    let volume_out = volume_m3;
+
+    if (volumeSel === 'cm3') {
+        volume_out = volume_m3 * 1_000_000.0;
+    } else if (volumeSel === 'ft3') {
+        volume_out = volume_m3 * 35.3147;
+    } else if (volumeSel === 'in3') {
+        volume_out = volume_m3 * 61_023.7441;
+    }
+
+    document.getElementById('volume').value = volume_out.toFixed(4);
+}
+
+['length','width','height'].forEach(name => {
+    document.querySelector(`[name=${name}]`).addEventListener('input', computeVolume);
+});
+document.querySelector('[name=unit]').addEventListener('change', computeVolume);
+document.getElementById('volume_unit').addEventListener('change', computeVolume);
+
+// cálculo inicial
+computeVolume();
+</script>
+
+{% endblock %}

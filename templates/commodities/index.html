@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} COMMODITIES {% endblock %}
+
+{% block content %}
+
+<h1>List of commodities</h1>
+
+{# 👇 YA NO HAY BOTÓN NEW, solo listado global #}
+{# <a href="{{ url_for('commodity.create') }}" class="btn btn-success mb-3">New</a> #}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>WHR #</th>
+            <th>Description</th>
+            <th>Pieces</th>
+            <th>Volume (m³)</th>
+            <th>Weight (kg)</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for item in commodities %}
+        <tr>
+            <td>{{ item.id }}</td>
+
+            {# si el commodity está asociado a un WHR, mostramos su número #}
+            <td>
+                {% if item.whr %}
+                    {{ item.whr.whr_number }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <td>{{ item.description }}</td>
+            <td>{{ item.pieces }}</td>
+            <td>{{ item.volume | round(4) }}</td>
+            <td>{{ item.weight | round(2) }}</td>
+
+            <td>
+                {% if item.status == item.STATUS_ON_HAND %}
+                    On Hand
+                {% elif item.status == item.STATUS_RELEASED %}
+                    Released
+                {% else %}
+                    Unknown
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

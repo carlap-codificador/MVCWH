@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %} WHR | CREATE {% endblock %}
+
+{% block content %}
+
+<h1>Create WHR</h1>
+
+<form action="{{ url_for('whr.create') }}" method="POST">
+  <div class="mb-3">
+    <label class="form-label">WHR #</label>
+    <input type="text" class="form-control" name="whr_number" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">DATE</label>
+    <input type="date" class="form-control" name="date" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">MBL</label>
+    <input type="text" class="form-control" name="mbl">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">HBL</label>
+    <input type="text" class="form-control" name="hbl">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">SHIPPER</label>
+    <select name="shipper_id" class="form-select" required>
+      <option value="">-- select shipper --</option>
+      {% for c in clients %}
+        <option value="{{ c.id }}">{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">CONSIGNEE</label>
+    <select name="consignee_id" class="form-select" required>
+      <option value="">-- select consignee --</option>
+      {% for c in clients %}
+        <option value="{{ c.id }}">{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">MODE OF TRANSPORTATION</label>
+    <input type="text" class="form-control" name="mode_of_transportation" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">ORIGIN</label>
+    <input type="text" class="form-control" name="origin" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">DESTINATION</label>
+    <input type="text" class="form-control" name="destination" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    Save and add commodities
+  </button>
+</form>
+
+{% endblock %}

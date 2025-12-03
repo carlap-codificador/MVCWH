@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %} Cargo Release | Create {% endblock %}
+
+{% block content %}
+
+<h1>Create Cargo Release</h1>
+
+<form action="{{ url_for('cr.create') }}" method="POST">
+
+  <div class="mb-3">
+    <label class="form-label">CR #</label>
+    <input type="text" class="form-control" name="cr_number" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">date</label>
+    <input type="date" class="form-control" name="date" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">consignee</label>
+    <select name="consignee_id" class="form-select" required>
+      <option value="">-- select consignee --</option>
+      {% for c in clients %}
+        <option value="{{ c.id }}">{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <hr>
+
+  <h4>WHR / commodities</h4>
+  <p>Selecciona los WHR que se liberan en este Cargo Release.</p>
+
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th></th>
+        <th>WHR #</th>
+        <th>consignee</th>
+        <th>commodities (piezas)</th>
+        <th>volume (m³)</th>
+        <th>weight (kg)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for w in whrs %}
+      <tr>
+        <td>
+          <input type="checkbox" name="whr_ids" value="{{ w.id }}">
+        </td>
+        <td>{{ w.whr_number }}</td>
+        <td>{{ w.consignee.name }}</td>
+        <td>{{ w.total_pieces }}</td>
+        <td>{{ w.total_volume | round(4) }}</td>
+        <td>{{ w.total_weight | round(2) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button type="submit" class="btn btn-primary">Save Cargo Release</button>
+  <a href="{{ url_for('cr.index') }}" class="btn btn-secondary">Cancel</a>
+
+</form>
+
+{% endblock %}

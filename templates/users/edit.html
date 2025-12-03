@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %} USERS | EDIT {% endblock %}
+
+{% block content %}
+
+<h1>Update Users</h1>
+
+<form action="{{ url_for('user.edit', id=user.id)}}" method="POST">
+    <div class="mb-3">
+        <label for="" class="form-label">Name</label>
+        <input type="text" class="form-control" name="name" value="{{ user.name}}"required>
+
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">User</label>
+        <input type="text" class="form-control" name="username" value="{{ user.username}}" required>
+        
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Password</label>
+        <input type="password" class="form-control" name="password">
+        
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Rol</label>
+        <select name="rol" class="form-select" required>
+            <option value="admin" {% if user.rol == 'admin' %}selected{% endif %}>Admin</option>
+            <option value="operator"  {% if user.rol == 'operator' %}selected{% endif %}>Operator</option>
+        </select>
+        
+    </div>
+    <button type="sibmit" class="btn btn-primary">Update user</button>
+</form>
+
+{% endblock %}

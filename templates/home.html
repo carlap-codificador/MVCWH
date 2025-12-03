@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %} CIRExpress | Warehouse {% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+  <div class="row align-items-center">
+    <div class="col-md-7">
+      <h1 class="display-5 fw-bold">CIRExpress Warehouse</h1>
+      <p class="lead">
+        Handling international cargo, handling containers and storage of loose cargo on Caribbean..
+      </p>
+      <p>
+        Manage your <strong>warehouse receipts</strong>, commodities and cargo release
+        from this internal panel.
+      </p>
+      <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg mt-2">
+        Login
+      </a>
+    </div>
+
+    <div class="col-md-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Acceso rápido</h5>
+          <p class="card-text">Ingresa con tus credenciales para administrar:</p>
+          <ul>
+            <li>Users</li>
+            <li>Clients</li>
+            <li>Commodities</li>
+            <li>Warehouse Receipts (WHR)</li>
+            <li>Cargo Release (CR)</li>
+          </ul>
+          <a href="{{ url_for('login') }}" class="btn btn-outline-primary w-100">
+            Ir al Login
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

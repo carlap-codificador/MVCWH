@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} WHR | VIEW {% endblock %}
+
+{% block content %}
+
+<h1>WHR {{ whr.whr_number }}</h1>
+
+<div class="card mt-3">
+  <div class="card-body">
+    <p><strong>Date:</strong> {{ whr.date }}</p>
+    <p><strong>MBL:</strong> {{ whr.mbl }}</p>
+    <p><strong>HBL:</strong> {{ whr.hbl }}</p>
+
+    <p><strong>Shipper:</strong> {{ whr.shipper.name }}</p>
+    <p><strong>Consignee:</strong> {{ whr.consignee.name }}</p>
+
+    <p><strong>Mode of transportation:</strong> {{ whr.mode_of_transportation }}</p>
+    <p><strong>Route:</strong> {{ whr.origin }} → {{ whr.destination }}</p>
+
+    <hr>
+    <h5>Totals</h5>
+    <p>
+      <strong>Pieces:</strong> {{ whr.total_pieces }}<br>
+      <strong>Weight (kg):</strong> {{ whr.total_weight | round(2) }}<br>
+      <strong>Volume (m³):</strong> {{ whr.total_volume | round(4) }}<br>
+      <strong>Status:</strong> {{ whr.status }}
+    </p>
+
+    <hr>
+    <h5>Commodities</h5>
+    {% if whr.commodities %}
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Pieces</th>
+            <th>Weight (kg)</th>
+            <th>Volume (m³)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in whr.commodities %}
+          <tr>
+            <td>{{ c.description }}</td>
+            <td>{{ c.pieces }}</td>
+            <td>{{ c.weight | round(2) }}</td>
+            <td>{{ c.volume | round(4) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No commodities added.</p>
+    {% endif %}
+
+    <a href="{{ url_for('whr.index') }}" class="btn btn-secondary mt-3">
+      Back to list
+    </a>
+  </div>
+</div>
+
+{% endblock %}

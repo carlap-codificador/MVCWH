@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %} Cargo Release | View {% endblock %}
+
+{% block content %}
+
+<h1>Cargo Release {{ cr.cr_number }}</h1>
+
+<div class="card mt-3">
+  <div class="card-body">
+
+    <p><strong>#CR:</strong> {{ cr.cr_number }}</p>
+    <p><strong>date:</strong> {{ cr.date }}</p>
+    <p><strong>consignee:</strong> {{ cr.consignee.name }}</p>
+
+    <hr>
+
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>WHR</th>
+          <th>commodities (pieces)</th>
+          <th>volume (m³)</th>
+          <th>weight (kg)</th>
+          <th>days in WH</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cr.items %}
+        <tr>
+          <td>{{ item.whr.whr_number }}</td>
+          <td>{{ item.pieces }}</td>
+          <td>{{ item.volume | round(4) }}</td>
+          <td>{{ item.weight | round(2) }}</td>
+          <td>{{ item.days_in_wh }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>TOTAL</th>
+          <th>{{ cr.total_pieces }}</th>
+          <th>{{ cr.total_volume | round(4) }}</th>
+          <th>{{ cr.total_weight | round(2) }}</th>
+          <th></th>
+        </tr>
+      </tfoot>
+    </table>
+
+    <a href="{{ url_for('cr.index') }}" class="btn btn-secondary mt-2">Back to list</a>
+
+  </div>
+</div>
+
+{% endblock %}

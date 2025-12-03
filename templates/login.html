@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Login | CIRExpress {% endblock %}
+
+{% block content %}
+<div class="text-center mt-4">
+    <h2>CIRExpress Warehouse Login</h2>
+</div>
+
+<div class="container mt-5" style="max-width: 500px;">
+  <h2 class="mb-4 text-center">Login</h2>
+
+  <form method="POST" action="{{ url_for('login') }}">
+    <div class="mb-3">
+      <label class="form-label">User</label>
+      <input type="text" class="form-control" name="username" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-control" name="password" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Enter</button>
+  </form>
+</div>
+
+{% endblock %}

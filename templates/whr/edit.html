@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %} WHR | EDIT {% endblock %}
+
+{% block content %}
+
+<h1>WHR {{ whr.whr_number }}</h1>
+
+<p><strong>Date:</strong> {{ whr.date }}</p>
+<p><strong>Shipper:</strong> {{ whr.shipper.name }}</p>
+<p><strong>Consignee:</strong> {{ whr.consignee.name }}</p>
+<p><strong>Route:</strong> {{ whr.origin }} → {{ whr.destination }}</p>
+<p><strong>Mode:</strong> {{ whr.mode_of_transportation }}</p>
+
+<a href="{{ url_for('commodity.create', whr_id=whr.id) }}" class="btn btn-success mb-3">
+  Add commodities
+</a>
+
+{% if whr.commodities %}
+  <h3>Commodities summary</h3>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Pieces</th>
+        <th>Weight (kg)</th>
+        <th>Volume (m³)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in whr.commodities %}
+      <tr>
+        <td>{{ c.description }}</td>
+        <td>{{ c.pieces }}</td>
+        <td>{{ c.weight | round(2) }}</td>
+        <td>{{ c.volume | round(4) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p>
+    <strong>Total pieces:</strong> {{ whr.total_pieces }}<br>
+    <strong>Total weight:</strong> {{ whr.total_weight | round(2) }}<br>
+    <strong>Total volume:</strong> {{ whr.total_volume | round(4) }}<br>
+    <strong>Status:</strong> {{ whr.status }}
+  </p>
+{% else %}
+  <p>No commodities added yet.</p>
+{% endif %}
+
+<form action="{{ url_for('whr.edit', id=whr.id) }}" method="POST">
+  <button type="submit" class="btn btn-primary">Save and return to list</button>
+  <a href="{{ url_for('whr.index') }}" class="btn btn-secondary">Cancel</a>
+</form>
+
+{% endblock %}

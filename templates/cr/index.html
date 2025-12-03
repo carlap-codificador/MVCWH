@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %} Cargo Release {% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mt-3 mb-3">
+  <h1>List of Cargo Release</h1>
+  <a href="{{ url_for('cr.create') }}" class="btn btn-success">create</a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>CR #</th>
+      <th>date</th>
+      <th>consignee</th>
+      <th>pieces</th>
+      <th>volume</th>
+      <th>weight</th>
+      <th>create</th>
+      <th>edit</th>
+      <th>delete</th>
+      <th>view</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in crs %}
+    <tr>
+      <td>{{ item.cr_number }}</td>
+      <td>{{ item.date }}</td>
+      <td>{{ item.consignee.name }}</td>
+      <td>{{ item.total_pieces }}</td>
+      <td>{{ item.total_volume | round(4) }}</td>
+      <td>{{ item.total_weight | round(2) }}</td>
+
+      <td>
+        <a href="{{ url_for('cr.create') }}" class="btn btn-success btn-sm">create</a>
+      </td>
+      <td>
+        {# edit pendiente, puedes enlazar a futuro #}
+        <button class="btn btn-warning btn-sm" disabled>edit</button>
+      </td>
+      <td>
+        <a href="{{ url_for('cr.delete', id=item.id) }}"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('Delete this Cargo Release?');">
+          delete
+        </a>
+      </td>
+      <td>
+        <a href="{{ url_for('cr.view', id=item.id) }}" class="btn btn-info btn-sm">view</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
